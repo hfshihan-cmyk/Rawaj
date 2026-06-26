@@ -30,3 +30,6 @@ next-env.d.ts
 
 # vercel
 .vercel
+
+# claude code harness artifacts
+.claude/
