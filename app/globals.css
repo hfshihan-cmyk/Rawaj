@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-cairo: "Cairo", system-ui, sans-serif;
+  --font-tajawal: "Tajawal", system-ui, sans-serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-cairo);
+}
+
+/* Arabic text renders slightly larger than the English sub-labels beneath it. */
+.ar {
+  font-size: 1.0625em; /* +~2px at base size */
+  line-height: 1.6;
+}
+
+.en {
+  font-size: 0.8125rem;
+  letter-spacing: 0.01em;
+  color: #6b7280;
+}
+
+/* On the dark dashboard the English sub-labels use the muted token. */
+.dark .en,
+.en-dark {
+  color: #9ca3af;
+}
+
+/* Custom scrollbar for the dark dashboard table */
+.thin-scroll::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.thin-scroll::-webkit-scrollbar-track {
+  background: #0a0f1e;
+}
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: #1f2937;
+  border-radius: 9999px;
+}
+.thin-scroll::-webkit-scrollbar-thumb:hover {
+  background: #14b8a6;
+}
+
+/* Keep number-heavy badges readable in RTL */
+.nums {
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  unicode-bidi: isolate;
+}

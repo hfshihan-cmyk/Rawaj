@@ -1,0 +1,19 @@
+{
+  "name": "رواج — Rawaj",
+  "short_name": "رواج",
+  "description": "اعرف سوقك قبل ما تبدأ — Know your market before you start.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/submit",
+  "display": "standalone",
+  "background_color": "#0a0f1e",
+  "theme_color": "#0a0f1e",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
