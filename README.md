@@ -2,7 +2,7 @@
 > اعرف سوقك قبل ما تبدأ — Spot The Opportunity
 
 🔗 **Live Demo**: https://rawaj-peach.vercel.app
-📹 **Demo Video**: *(record with Loom — link to be added)*
+📹 **Demo Video**: [Watch Demo](./docs/demo.mp4)
 📊 **Evidence**: [data/seeds.json](./data/seeds.json) — 60 verified resident submissions
 🏆 **Tatweer Hackathon 2026 · Challenge #3 · Reef Dev Team · Al Ain University**
 
@@ -159,7 +159,7 @@ No `.env` file needed. Zero environment variables. Zero paid services.
 | 60 resident submissions | [`data/seeds.json`](./data/seeds.json) | The data gap is real and measurable |
 | Screenshots | [`docs/screenshots/`](./docs/screenshots/) | All pages work end-to-end |
 | Live demo | https://rawaj-peach.vercel.app | Deployable, not just a prototype |
-| Demo video | *(link to be added)* | End-to-end flow in 90 seconds |
+| Demo video | [`docs/demo.mp4`](./docs/demo.mp4) | End-to-end flow in 90 seconds |
 | `.env.example` | [`.env.example`](./.env.example) | Zero configuration required |
 
 ---
