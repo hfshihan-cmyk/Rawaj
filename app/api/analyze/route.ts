@@ -1,43 +1,20 @@
 import { NextResponse } from "next/server";
-import { analyzeOpportunities } from "@/lib/claude";
+import { analyzeOpportunities } from "@/lib/opportunities";
 import type { AnalyzePayload } from "@/lib/types";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+// No API key, no external service — returns an instant, Al Qua'a-specific
+// opportunity report derived from the live demand data sent by the client.
 export async function POST(req: Request) {
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return NextResponse.json(
-      { error: "مفتاح ANTHROPIC_API_KEY غير مضبوط على الخادم." },
-      { status: 500 },
-    );
-  }
-
-  let payload: AnalyzePayload;
+  let payload: AnalyzePayload | undefined;
   try {
     payload = (await req.json()) as AnalyzePayload;
   } catch {
-    return NextResponse.json(
-      { error: "صيغة الطلب غير صحيحة." },
-      { status: 400 },
-    );
+    payload = undefined;
   }
 
-  if (!payload?.aggregates?.length) {
-    return NextResponse.json(
-      { error: "لا توجد بيانات كافية للتحليل." },
-      { status: 400 },
-    );
-  }
-
-  try {
-    const opportunities = await analyzeOpportunities(payload);
-    return NextResponse.json({ opportunities });
-  } catch (err) {
-    console.error("[/api/analyze] failed:", err);
-    return NextResponse.json(
-      { error: "تعذّر إنشاء تقرير الفرص. حاول مرة أخرى." },
-      { status: 502 },
-    );
-  }
+  const opportunities = await analyzeOpportunities(payload);
+  return NextResponse.json({ opportunities });
 }

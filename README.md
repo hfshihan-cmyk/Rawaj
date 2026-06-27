@@ -15,7 +15,7 @@ In a remote community like Al Qua'a, a would-be entrepreneur has no data. There 
 
 Meanwhile, the demand is **real and specific**: residents drive to Al Ain for fresh bread, can't find a mobile camel vet, and watch world-class stargazing skies go commercially untapped.
 
-**Rawaj closes that gap.** Residents tap in what they need in under 30 seconds (Arabic, no account). Entrepreneurs open a market-intelligence dashboard that ranks demand and — with one click — gets an AI opportunity report grounded in that exact local data and the UAE business context (Khalifa Fund, trade-licence costs, local entities).
+**Rawaj closes that gap.** Residents tap in what they need in under 30 seconds (Arabic, no account). Entrepreneurs open a market-intelligence dashboard that ranks demand and — with one click — gets an opportunity report grounded in that exact local data and the UAE business context (Khalifa Fund, trade-licence costs, local entities). The report returns **instantly, with no API key and no setup** — it works fully offline and on Vercel with zero environment variables.
 
 ---
 
@@ -58,22 +58,22 @@ localStorage "rawaj_needs"  (new submissions captured live during the demo)
 ```
 
 - **`/submit`** saves new needs to `localStorage` → the UI and the dashboard counter update instantly, so it *feels* real-time.
-- **`/api/analyze`** is stateless: the client sends an **aggregated, anonymised** summary (counts + sample descriptions, never personal data), the route calls Claude, and returns 3 ranked opportunities. The API key never reaches the browser.
+- **`/api/analyze`** is stateless and **needs no external service**: the client sends an **aggregated, anonymised** summary (counts + sample descriptions, never personal data), and the route returns 3 ranked, Al Qua'a-specific opportunities **instantly**. Demand counts in the report are pulled from the live dataset, so the report always matches the dashboard.
 
 ---
 
 ## Feasibility
 
-- **Cost: AED 0 / month.** Vercel free tier + no database + a single LLM endpoint. The only running cost is per-click AI analysis.
-- **Maintenance: zero servers.** Fully serverless; nothing to patch or scale manually.
-- **Resilient:** the whole app (form, dashboard, charts, table) works **offline-capable** from the seed file — only the AI report needs the network.
+- **Cost: AED 0 / month.** Vercel free tier + no database + no external API. There are **no running costs at all**.
+- **Maintenance: zero servers, zero secrets.** Fully serverless; nothing to patch, scale, or configure — **no environment variables**.
+- **Resilient:** the entire app (form, dashboard, charts, table, **and the opportunity report**) runs from local data — nothing depends on a third-party service being up.
 - **Mobile-first & installable:** responsive, RTL, works on 3G, installable as a **PWA** ([`public/manifest.json`](./public/manifest.json)).
 
 ---
 
 ## Scalability
 
-Rawaj is built around a **`community_id`** abstraction. A new community = **one config change** in [`lib/categories.ts`](./lib/categories.ts) (`COMMUNITY` + category set) and a fresh seed file. The analyst persona in [`lib/claude.ts`](./lib/claude.ts) is parameterised by community context, so the same engine serves any UAE town — Liwa, Hatta, Madinat Zayed — without code rewrites.
+Rawaj is built around a **`community_id`** abstraction. A new community = **one config change** in [`lib/categories.ts`](./lib/categories.ts) (`COMMUNITY` + category set), a fresh seed file, and the opportunity templates in [`lib/opportunities.ts`](./lib/opportunities.ts). The same engine serves any UAE town — Liwa, Hatta, Madinat Zayed — without code rewrites.
 
 ---
 
@@ -81,19 +81,18 @@ Rawaj is built around a **`community_id`** abstraction. A new community = **one 
 
 ```bash
 npm install
-echo "ANTHROPIC_API_KEY=your_key" > .env.local
 npm run dev
 ```
 
 Then open **http://localhost:3000** — it redirects to `/submit`.
 Dashboard: **/dashboard** (password: `rawaj2026`).
 
-> The app runs fully **without** an API key — only the "Analyze Opportunities with AI" button needs it.
+> **No `.env`, no API key, no setup.** Every feature — including the opportunity report — works out of the box.
 
 ### Deploy to Vercel
 
 1. Push this repo to GitHub and import it into Vercel.
-2. Add **one** environment variable: `ANTHROPIC_API_KEY`.
+2. **No environment variables to add.**
 3. Deploy. That's the entire setup.
 
 ---
@@ -106,9 +105,9 @@ Dashboard: **/dashboard** (password: `rawaj2026`).
 | Styling | Tailwind CSS (custom RTL Arabic-first design system) |
 | Fonts | Cairo + Tajawal (Google Fonts, Arabic) |
 | Charts | Recharts |
-| AI | Anthropic Claude (`claude-sonnet-4-6`) |
+| Opportunity report | Built-in, data-driven templates (`lib/opportunities.ts`) — no external API |
 | Data | `data/seeds.json` + browser `localStorage` (no database) |
-| Hosting | Vercel (one env var: `ANTHROPIC_API_KEY`) |
+| Hosting | Vercel (zero environment variables) |
 
 ---
 
@@ -117,7 +116,7 @@ Dashboard: **/dashboard** (password: `rawaj2026`).
 - **The data:** [`data/seeds.json`](./data/seeds.json) — 60 submissions (26 camel · 15 food/dairy · 9 tourism · 6 home · 4 tech).
 - **The resident view:** [`app/submit/page.tsx`](./app/submit/page.tsx) + [`components/NeedForm.tsx`](./components/NeedForm.tsx).
 - **The entrepreneur view:** [`app/dashboard/page.tsx`](./app/dashboard/page.tsx) — demand chart, ranked needs, AI report, filterable table.
-- **The AI engine:** [`lib/claude.ts`](./lib/claude.ts) + [`app/api/analyze/route.ts`](./app/api/analyze/route.ts).
+- **The opportunity engine:** [`lib/opportunities.ts`](./lib/opportunities.ts) + [`app/api/analyze/route.ts`](./app/api/analyze/route.ts).
 
 _Screenshots: add `/submit` and `/dashboard` captures here before submission._
 
@@ -127,9 +126,9 @@ _Screenshots: add `/submit` and `/dashboard` captures here before submission._
 
 ## رواج باختصار
 
-**رواج** منصة بسيطة تسدّ فجوة البيانات أمام رواد الأعمال في **القوع**. يسجّل السكان احتياجاتهم في أقل من 30 ثانية (بالعربية، بدون حساب)، فيحصل رائد الأعمال على **لوحة ذكاء سوق** ترتّب الطلب وتقترح — بضغطة زر وبالذكاء الاصطناعي — أفضل 3 فرص تجارية مبنية على بيانات مجتمعه الحقيقية وسياق الأعمال الإماراتي (صندوق خليفة، تكلفة الرخصة التجارية، الجهات الداعمة).
+**رواج** منصة بسيطة تسدّ فجوة البيانات أمام رواد الأعمال في **القوع**. يسجّل السكان احتياجاتهم في أقل من 30 ثانية (بالعربية، بدون حساب)، فيحصل رائد الأعمال على **لوحة ذكاء سوق** ترتّب الطلب وتقترح — بضغطة زر وفوراً — أفضل 3 فرص تجارية مبنية على بيانات مجتمعه الحقيقية وسياق الأعمال الإماراتي (صندوق خليفة، تكلفة الرخصة التجارية، الجهات الداعمة).
 
-بدون قاعدة بيانات. بدون خادم. التكلفة صفر درهم شهرياً. متغيّر بيئة واحد فقط للنشر.
+بدون قاعدة بيانات. بدون خادم. بدون مفتاح API. التكلفة صفر درهم شهرياً، وبدون أي متغيّرات بيئة للنشر.
 
 **اعرف سوقك قبل ما تبدأ.**
 
