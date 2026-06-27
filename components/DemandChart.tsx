@@ -29,7 +29,7 @@ function ChartTooltip({
   if (!active || !payload || payload.length === 0) return null;
   const d = payload[0].payload;
   return (
-    <div className="rounded-xl border border-gray-700 bg-[#0a0f1e] px-3 py-2 shadow-lg">
+    <div className="rounded-xl border border-white/10 bg-surface-container-lowest px-3 py-2 shadow-lg">
       <p className="ar text-sm font-bold text-ink">
         {d.emoji} {d.label}
       </p>

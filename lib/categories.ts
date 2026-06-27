@@ -1,3 +1,4 @@
+import { ACTIVE_COMMUNITY } from "./communities";
 import type { CategoryKey, Frequency } from "./types";
 
 export interface CategoryDef {
@@ -49,9 +50,9 @@ export const NEIGHBORHOODS = [
   "أخرى",
 ];
 
-/** One config change scales Rawaj to a new community (see README → Scalability). */
+/** One config change scales Rawaj to a new community (see lib/communities.ts). */
 export const COMMUNITY = {
-  id: "al-quaa",
-  name_ar: "القوع",
-  name_en: "Al Qua'a",
+  id: ACTIVE_COMMUNITY.id,
+  name_ar: ACTIVE_COMMUNITY.name_ar,
+  name_en: ACTIVE_COMMUNITY.name_en,
 };

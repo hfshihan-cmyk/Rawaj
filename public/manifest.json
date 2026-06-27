@@ -6,8 +6,8 @@
   "dir": "rtl",
   "start_url": "/submit",
   "display": "standalone",
-  "background_color": "#0a0f1e",
-  "theme_color": "#0a0f1e",
+  "background_color": "#051424",
+  "theme_color": "#051424",
   "icons": [
     {
       "src": "/icon.svg",

@@ -29,7 +29,7 @@ export default function NeedsTable({ needs }: { needs: Need[] }) {
   );
 
   const selectClass =
-    "ar rounded-xl border border-gray-700 bg-[#0a0f1e] px-3 py-2 text-sm text-ink focus:border-accent focus:outline-none";
+    "ar rounded-lg border border-white/10 bg-surface-container-lowest px-3 py-2 text-sm text-ink focus:border-accent focus:outline-none";
 
   return (
     <div>
@@ -84,9 +84,9 @@ export default function NeedsTable({ needs }: { needs: Need[] }) {
       </div>
 
       {/* Table */}
-      <div className="thin-scroll max-h-[28rem] overflow-auto rounded-2xl border border-gray-800">
+      <div className="thin-scroll max-h-[28rem] overflow-auto rounded-xl border border-white/5">
         <table className="w-full border-collapse text-right">
-          <thead className="sticky top-0 bg-[#0a0f1e]">
+          <thead className="sticky top-0 bg-surface-container-lowest">
             <tr className="ar text-xs text-muted">
               <th className="px-4 py-3 font-semibold">المنطقة</th>
               <th className="px-4 py-3 font-semibold">الفئة</th>
@@ -101,9 +101,9 @@ export default function NeedsTable({ needs }: { needs: Need[] }) {
               return (
                 <tr
                   key={n.id}
-                  className="border-t border-gray-800 align-top hover:bg-white/[0.02]"
+                  className="border-t border-white/5 align-top hover:bg-white/[0.02]"
                 >
-                  <td className="ar px-4 py-3 text-sm text-gray-300">
+                  <td className="ar px-4 py-3 text-sm text-on-surface-variant">
                     {n.neighborhood}
                   </td>
                   <td className="ar px-4 py-3 text-sm">
@@ -111,12 +111,12 @@ export default function NeedsTable({ needs }: { needs: Need[] }) {
                       {c.emoji} {c.ar}
                     </span>
                   </td>
-                  <td className="ar px-4 py-3 text-sm text-gray-200">
+                  <td className="ar px-4 py-3 text-sm text-on-surface">
                     {n.description || (
                       <span className="text-muted">—</span>
                     )}
                   </td>
-                  <td className="ar px-4 py-3 text-sm text-gray-300">
+                  <td className="ar px-4 py-3 text-sm text-on-surface-variant">
                     {FREQUENCY_MAP[n.frequency].ar}
                   </td>
                   <td className="nums px-4 py-3 text-xs text-muted">

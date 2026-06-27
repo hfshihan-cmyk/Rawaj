@@ -37,6 +37,7 @@ export interface AnalyzePayload {
 }
 
 export interface Opportunity {
+  id: string;
   rank: number;
   title_ar: string;
   title_en: string;
@@ -47,4 +48,13 @@ export interface Opportunity {
   support_entity: string;
   feasibility: "low" | "medium";
   cost_estimate_ar: string;
+  // Detail-page (/opportunity/[id]) fields
+  sector_ar: string;
+  sector_en: string;
+  demand_intensity: number; // 0–100
+  gap_analysis_ar: string;
+  gap_analysis_en: string;
+  first_step_en: string;
+  market_size_ar: string;
+  competition_ar: string;
 }

@@ -3,27 +3,32 @@ import NeedForm from "@/components/NeedForm";
 
 export default function SubmitPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-teal-50 via-white to-white">
-      <div className="mx-auto max-w-xl px-4 py-8 sm:py-12">
-        {/* Header */}
-        <header className="mb-6 text-center">
-          <h1 className="ar text-3xl font-extrabold text-gray-900 sm:text-4xl">
-            رواج — القوع 🐪
-          </h1>
-          <p className="ar mt-2 text-lg font-semibold text-teal-700">
-            شو تحتاج ولا تلاقيه في القوع؟
-          </p>
-          <p className="en mt-1">
-            Rawaj · Tell us what you need but can&apos;t find in Al Qua&apos;a
-          </p>
-        </header>
+    <main className="relative min-h-screen overflow-x-hidden bg-background text-on-surface">
+      {/* Ambient grid + glow */}
+      <div className="bg-grid-pattern pointer-events-none fixed inset-0 z-0" />
+      <div className="pointer-events-none fixed left-1/2 top-0 z-0 h-96 w-1/2 -translate-x-1/2 rounded-full bg-secondary/10 blur-[120px]" />
 
+      {/* Top bar */}
+      <nav className="relative z-20 mx-auto flex max-w-container-max flex-row-reverse items-center justify-between px-lg py-md">
+        <Link href="/" className="font-geist text-2xl font-bold tracking-tighter">
+          رواج <span className="text-secondary">Rawaj</span>
+        </Link>
+        <Link
+          href="/"
+          className="flex items-center gap-xs font-mono text-label-sm text-outline transition-colors hover:text-secondary"
+        >
+          <span className="material-symbols-outlined text-[18px]">close</span>
+          إلغاء
+        </Link>
+      </nav>
+
+      <div className="relative z-10 mx-auto max-w-2xl px-lg pb-xl pt-md">
         <NeedForm />
 
-        <footer className="mt-8 text-center">
+        <footer className="mt-xl text-center">
           <Link
             href="/dashboard"
-            className="ar text-sm font-semibold text-gray-500 hover:text-teal-700 hover:underline"
+            className="ar font-mono text-label-sm text-outline transition-colors hover:text-secondary"
           >
             هل أنت رائد أعمال؟ افتح لوحة ذكاء السوق ←
           </Link>

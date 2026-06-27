@@ -14,201 +14,222 @@ import {
 } from "@/lib/dataUtils";
 import type { Need, Opportunity } from "@/lib/types";
 
-const PASSWORD = "rawaj2026";
-
 export default function DashboardPage() {
-  const [unlocked, setUnlocked] = useState(false);
-
-  return (
-    <main className="min-h-screen bg-bg text-ink">
-      {unlocked ? (
-        <Dashboard />
-      ) : (
-        <Gate onUnlock={() => setUnlocked(true)} />
-      )}
-    </main>
-  );
-}
-
-/* ----------------------------- Password gate ----------------------------- */
-
-function Gate({ onUnlock }: { onUnlock: () => void }) {
-  const [value, setValue] = useState("");
-  const [error, setError] = useState(false);
-
-  function submit(e: React.FormEvent) {
-    e.preventDefault();
-    if (value === PASSWORD) onUnlock();
-    else setError(true);
-  }
-
-  return (
-    <div className="flex min-h-screen items-center justify-center px-4">
-      <form
-        onSubmit={submit}
-        className="w-full max-w-sm rounded-3xl border border-gray-800 bg-card p-8 text-center shadow-2xl"
-      >
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-teal-500/10 text-3xl">
-          🔐
-        </div>
-        <h1 className="ar text-2xl font-extrabold">لوحة ذكاء السوق</h1>
-        <p className="en-dark mt-1">Market Intelligence — Al Qua&apos;a</p>
-        <p className="ar mt-4 text-sm text-muted">
-          هذه اللوحة مخصصة لرواد الأعمال. أدخل كلمة المرور للمتابعة.
-        </p>
-
-        <input
-          type="password"
-          value={value}
-          autoFocus
-          onChange={(e) => {
-            setValue(e.target.value);
-            setError(false);
-          }}
-          placeholder="كلمة المرور"
-          className="ar mt-5 w-full rounded-2xl border-2 border-gray-700 bg-bg p-4 text-center text-ink placeholder:text-gray-600 focus:border-accent focus:outline-none"
-        />
-        {error && (
-          <p className="ar mt-3 text-sm font-semibold text-red-400">
-            كلمة المرور غير صحيحة
-          </p>
-        )}
-
-        <button
-          type="submit"
-          className="ar mt-5 w-full rounded-2xl bg-teal-600 px-6 py-4 text-lg font-bold text-white transition hover:bg-teal-700 active:scale-[0.98]"
-        >
-          دخول
-        </button>
-        <Link
-          href="/submit"
-          className="ar mt-4 block text-sm text-muted hover:text-accent"
-        >
-          ← العودة لصفحة الاحتياجات
-        </Link>
-      </form>
-    </div>
-  );
-}
-
-/* ------------------------------- Dashboard ------------------------------- */
-
-function Dashboard() {
   const [needs, setNeeds] = useState<Need[] | null>(null);
 
-  // Load merged (seeds + localStorage) only on the client to avoid hydration mismatch.
+  // Merged (seeds + localStorage) loads on the client to avoid hydration mismatch.
   useEffect(() => {
     setNeeds(getMergedNeeds());
   }, []);
 
-  if (!needs) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p className="ar text-muted">جارٍ تحميل البيانات…</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8 sm:py-10">
-      <Header total={needs.length} />
-      <SectionA needs={needs} />
-      <SectionB needs={needs} />
-      <SectionC needs={needs} />
-      <SectionD needs={needs} />
-      <footer className="mt-12 text-center">
-        <p className="ar text-xs text-muted">
-          رواج — بيانات مجتمع القوع · {needs.length} حاجة مسجّلة · النموذج
-          الأولي لهاكاثون تطوير 2026
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-on-surface">
+      <div className="bg-grid-pattern pointer-events-none fixed inset-0 z-0 opacity-60" />
+
+      {/* Top bar */}
+      <nav className="relative z-30 border-b border-white/5 bg-surface/80 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-container-max flex-row-reverse items-center justify-between px-lg py-md">
+          <Link href="/" className="font-geist text-2xl font-bold tracking-tighter">
+            رواج <span className="text-secondary">Rawaj</span>
+          </Link>
+          <div className="flex flex-row-reverse items-center gap-md">
+            <Link
+              href="/submit"
+              className="ar rounded-lg border border-secondary/40 px-md py-sm font-mono text-label-sm text-secondary transition hover:bg-secondary/10"
+            >
+              + إضافة احتياج
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      <div className="relative z-10 mx-auto flex max-w-container-max gap-lg px-lg py-lg">
+        <Sidebar />
+        <main className="min-w-0 flex-grow">
+          {needs ? <Dashboard needs={needs} /> : <Loading />}
+        </main>
+      </div>
+
+      <footer className="relative z-10 border-t border-white/5 px-lg py-lg text-center">
+        <p className="font-mono text-label-sm text-outline">
+          رواج • Tatweer 2026 • Challenge #3 • Reef Dev Team • صنع في القوع
         </p>
       </footer>
     </div>
   );
 }
 
+function Loading() {
+  return (
+    <div className="flex h-[60vh] items-center justify-center">
+      <p className="ar text-on-surface-variant">جارٍ تحميل البيانات…</p>
+    </div>
+  );
+}
+
+function Sidebar() {
+  const item =
+    "ar flex items-center gap-sm rounded-lg px-md py-sm text-body-md text-on-surface-variant transition hover:bg-white/5 hover:text-secondary";
+  return (
+    <aside className="hidden w-[240px] shrink-0 lg:block">
+      <div className="glass-panel sticky top-lg rounded-xl p-md">
+        <p className="ar mb-sm px-md font-mono text-label-sm uppercase text-outline">
+          نظرة عامة • Overview
+        </p>
+        <nav className="space-y-1">
+          <a href="#demand" className={item}>
+            <span className="material-symbols-outlined text-[20px] text-secondary">bar_chart</span>
+            الطلب حسب الفئة
+          </a>
+          <a href="#top" className={item}>
+            <span className="material-symbols-outlined text-[20px] text-secondary">trophy</span>
+            أهم الاحتياجات
+          </a>
+          <a href="#table" className={item}>
+            <span className="material-symbols-outlined text-[20px] text-secondary">table</span>
+            كل الطلبات
+          </a>
+        </nav>
+        <p className="ar mb-sm mt-lg px-md font-mono text-label-sm uppercase text-tertiary">
+          مميّز • Premium
+        </p>
+        <nav className="space-y-1">
+          <a href="#ai" className={item}>
+            <span className="material-symbols-outlined text-[20px] text-tertiary">auto_awesome</span>
+            توقعات الذكاء الاصطناعي
+          </a>
+        </nav>
+      </div>
+    </aside>
+  );
+}
+
+function Dashboard({ needs }: { needs: Need[] }) {
+  return (
+    <div className="space-y-lg">
+      <Header total={needs.length} />
+      <EvidenceBanner total={needs.length} needs={needs} />
+      <div className="grid grid-cols-1 gap-lg xl:grid-cols-2">
+        <DemandSection needs={needs} />
+        <LeaderboardSection needs={needs} />
+      </div>
+      <AISection needs={needs} />
+      <TableSection needs={needs} />
+    </div>
+  );
+}
+
 function Header({ total }: { total: number }) {
   return (
-    <header className="mb-8 flex flex-col gap-3 border-b border-gray-800 pb-6 sm:flex-row sm:items-end sm:justify-between">
+    <header className="flex flex-col gap-2 border-b border-white/5 pb-lg sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <h1 className="ar text-3xl font-extrabold">لوحة ذكاء السوق — القوع</h1>
-        <p className="en-dark mt-1">Market Intelligence Dashboard — Al Qua&apos;a</p>
+        <h1 className="ar text-headline-md font-bold text-on-surface">
+          لوحة ذكاء السوق — القوع
+        </h1>
+        <p className="en mt-1">Market Intelligence Dashboard — Al Qua&apos;a</p>
       </div>
-      <div className="rounded-2xl bg-teal-500/10 px-4 py-3 text-center">
-        <p className="ar text-sm text-accent">
-          📊{" "}
-          <span className="nums text-2xl font-extrabold">{total}</span> حاجة
-          مجتمعية مسجّلة
-        </p>
+      <div className="glass-panel teal-glow rounded-xl px-md py-sm text-center">
+        <span className="ar text-sm text-secondary">
+          📊 <span className="nums text-xl font-extrabold">{total}</span> حاجة مسجّلة
+        </span>
       </div>
     </header>
   );
 }
 
-/* Section A — Demand overview chart */
-function SectionA({ needs }: { needs: Need[] }) {
+function EvidenceBanner({ total, needs }: { total: number; needs: Need[] }) {
+  const camel = needs.filter((n) => n.category === "camel").length;
+  const pct = total ? Math.round((camel / total) * 100) : 0;
+  return (
+    <div className="card-top-light flex flex-col items-start gap-2 rounded-xl border border-secondary/20 bg-secondary/10 px-lg py-md sm:flex-row sm:items-center sm:justify-between">
+      <p className="ar text-body-md text-on-surface">
+        <span className="font-mono text-secondary">●</span> دليل حيّ:{" "}
+        <span className="nums font-bold text-secondary">{camel}</span> من{" "}
+        <span className="nums font-bold">{total}</span> احتياجاً مرتبط بالإبل (
+        <span className="nums">{pct}%</span>) — أكبر فجوة في السوق.
+      </p>
+      <span className="font-mono text-label-sm text-on-surface-variant">
+        Needs found in Al Qua&apos;a this month: {total}
+      </span>
+    </div>
+  );
+}
+
+function DemandSection({ needs }: { needs: Need[] }) {
   const data = useMemo(() => chartData(needs), [needs]);
   return (
-    <section className="mb-10 rounded-2xl border border-gray-800 bg-card p-5 sm:p-6">
-      <h2 className="ar mb-1 text-xl font-bold">توزيع الاحتياجات حسب الفئة</h2>
-      <p className="en-dark mb-4">Community demand by category</p>
+    <section id="demand" className="glass-panel card-top-light rounded-xl p-lg">
+      <h2 className="ar text-body-lg font-bold text-on-surface">الطلب حسب الفئة</h2>
+      <p className="en mb-md">Demand by Category</p>
       <DemandChart data={data} />
     </section>
   );
 }
 
-/* Section B — Top unmet needs */
-function SectionB({ needs }: { needs: Need[] }) {
+const TROPHIES = ["🥇", "🥈", "🥉"];
+
+function LeaderboardSection({ needs }: { needs: Need[] }) {
   const ranked = useMemo(() => topNeeds(needs, 5), [needs]);
   return (
-    <section className="mb-10">
-      <h2 className="ar mb-1 text-xl font-bold">أهم الاحتياجات غير الملبّاة</h2>
-      <p className="en-dark mb-4">Top unmet needs, ranked by demand</p>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <section id="top" className="glass-panel card-top-light rounded-xl p-lg">
+      <h2 className="ar text-body-lg font-bold text-on-surface">أهم الاحتياجات</h2>
+      <p className="en mb-md">Top Needs — ranked by demand</p>
+      <ol className="space-y-sm">
         {ranked.map((r, i) => {
           const c = CATEGORY_MAP[r.category];
           return (
-            <div
+            <li
               key={r.category}
-              className="rounded-2xl border border-gray-800 bg-card p-5"
+              className="flex items-center gap-md rounded-lg border border-white/5 bg-surface-container-lowest px-md py-sm transition hover:border-secondary/30"
             >
-              <div className="flex items-center justify-between">
-                <span className="ar flex items-center gap-2 font-bold">
-                  <span className="text-2xl">{c.emoji}</span>
-                  {c.ar}
-                </span>
-                <span className="ar text-xs text-muted">#{i + 1}</span>
-              </div>
-              <p className="ar mt-3">
-                <span className="nums text-3xl font-extrabold text-accent">
-                  {r.count}
-                </span>{" "}
-                <span className="text-muted">طلب</span>
-              </p>
-              <span className="ar mt-1 inline-block rounded-full bg-teal-500/10 px-2.5 py-0.5 text-xs font-semibold text-accent">
-                {FREQUENCY_MAP[r.top_frequency].ar}
+              <span className="w-7 shrink-0 text-center text-xl">
+                {TROPHIES[i] ?? <span className="nums text-outline">{i + 1}</span>}
               </span>
-              <ul className="ar mt-3 space-y-1.5 border-t border-gray-800 pt-3 text-sm text-gray-300">
-                {r.samples.length > 0 ? (
-                  r.samples.map((s, idx) => (
-                    <li key={idx} className="flex gap-1.5">
-                      <span className="text-accent">•</span>
-                      <span>{s}</span>
-                    </li>
-                  ))
-                ) : (
-                  <li className="text-muted">—</li>
-                )}
-              </ul>
-            </div>
+              <span className="text-2xl">{c.emoji}</span>
+              <div className="min-w-0 flex-grow">
+                <p className="ar truncate font-bold text-on-surface">{c.ar}</p>
+                <p className="ar truncate text-xs text-on-surface-variant">
+                  {r.samples[0] ?? FREQUENCY_MAP[r.top_frequency].ar}
+                </p>
+              </div>
+              <div className="shrink-0 text-left">
+                <span className="nums text-xl font-extrabold text-secondary">{r.count}</span>
+                <span className="ar mr-1 text-xs text-outline">طلب</span>
+              </div>
+            </li>
           );
         })}
-      </div>
+      </ol>
     </section>
   );
 }
 
-/* Section C — AI opportunity report */
-function SectionC({ needs }: { needs: Need[] }) {
+/* Static AI-insight teaser bento (with watermark numbers), then the generated report. */
+const INSIGHTS = [
+  {
+    n: "01",
+    tone: "teal" as const,
+    tagAr: "توصية",
+    tagEn: "Recommendation",
+    body: "دمج طلبات علف الإبل في توريد جماعي قد يخفّض التكلفة حتى 20% على المزارع الحالية.",
+  },
+  {
+    n: "02",
+    tone: "gold" as const,
+    tagAr: "تنبيه",
+    tagEn: "Alert",
+    body: "خدمات السياحة الفلكية لها 9 طلبات محلية و0 مزوّد — فجوة سوق مؤكدة في القوع.",
+  },
+  {
+    n: "03",
+    tone: "teal" as const,
+    tagAr: "فرصة",
+    tagEn: "Opportunity",
+    body: "نقص حاد في معالجة حليب الإبل الطازج رغم أنه الطلب الأول — أعلى عائد متوقّع.",
+  },
+];
+
+function AISection({ needs }: { needs: Need[] }) {
   const [loading, setLoading] = useState(false);
   const [opps, setOpps] = useState<Opportunity[] | null>(null);
   const [error, setError] = useState("");
@@ -224,71 +245,80 @@ function SectionC({ needs }: { needs: Need[] }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || `فشل التحليل (${res.status})`);
-      }
+      if (!res.ok) throw new Error(`فشل التحليل (${res.status})`);
       const data = (await res.json()) as { opportunities: Opportunity[] };
       setOpps(data.opportunities);
-    } catch (e) {
-      setError(
-        e instanceof Error
-          ? e.message
-          : "تعذّر الاتصال بخدمة التحليل. تأكد من ضبط مفتاح API.",
-      );
+    } catch {
+      setError("تعذّر إنشاء التقرير. حاول مرة أخرى.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <section className="mb-10 rounded-2xl border border-teal-900/60 bg-gradient-to-b from-teal-950/30 to-card p-5 sm:p-6">
-      <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+    <section
+      id="ai"
+      className="card-top-light rounded-xl border border-tertiary/20 bg-gradient-to-b from-tertiary/5 to-transparent p-lg"
+    >
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="ar text-xl font-bold">تقرير الفرص بالذكاء الاصطناعي ⭐</h2>
-          <p className="en-dark">AI Opportunity Report</p>
+          <h2 className="ar text-headline-md font-bold text-on-surface">
+            رؤى الذكاء الاصطناعي ⭐
+          </h2>
+          <p className="en">AI Insights — Al Qua&apos;a Forecast</p>
         </div>
         <button
           onClick={analyze}
           disabled={loading}
-          className="ar mt-3 rounded-2xl bg-teal-600 px-5 py-3 text-base font-bold text-white shadow-lg shadow-teal-600/20 transition hover:bg-teal-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 sm:mt-0"
+          className="ar rounded-lg bg-secondary px-lg py-sm text-body-md font-bold text-on-secondary shadow-[0_4px_14px_0_rgba(79,219,200,0.39)] transition hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60"
         >
           {loading ? "جارٍ التحليل…" : "🤖 حلّل الفرص بالذكاء الاصطناعي"}
         </button>
       </div>
 
-      {!opps && !loading && !error && (
-        <p className="ar mt-4 text-sm text-muted">
-          اضغط الزر ليحلّل النظام بيانات الطلب المجتمعي ويقترح أفضل 3 فرص
-          تجارية مناسبة للقوع — فوراً وبدون أي إعدادات.
-        </p>
-      )}
+      {/* Teaser bento */}
+      <div className="mt-lg grid grid-cols-1 gap-md md:grid-cols-3">
+        {INSIGHTS.map((ins) => (
+          <div
+            key={ins.n}
+            className="glass-panel relative overflow-hidden rounded-xl p-md"
+          >
+            <span className="watermark font-geist absolute -bottom-8 -left-2 !text-[7rem]">
+              {ins.n}
+            </span>
+            <span
+              className={`ar relative z-10 inline-block rounded-full px-2.5 py-0.5 text-xs font-bold ${
+                ins.tone === "gold"
+                  ? "bg-tertiary/10 text-tertiary"
+                  : "bg-secondary/10 text-secondary"
+              }`}
+            >
+              {ins.tagAr} <span className="en">({ins.tagEn})</span>
+            </span>
+            <p className="ar relative z-10 mt-sm text-sm leading-relaxed text-on-surface-variant">
+              {ins.body}
+            </p>
+          </div>
+        ))}
+      </div>
 
+      {/* Generated report */}
       {loading && (
-        <div className="mt-6 grid gap-4 lg:grid-cols-3">
+        <div className="mt-lg grid gap-md lg:grid-cols-3">
           {[0, 1, 2].map((i) => (
-            <div
-              key={i}
-              className="h-64 animate-pulse rounded-2xl border border-gray-800 bg-white/[0.03]"
-            />
+            <div key={i} className="glass-panel h-64 animate-pulse rounded-xl" />
           ))}
         </div>
       )}
-
       {error && (
-        <p className="ar mt-4 rounded-xl bg-red-500/10 px-4 py-3 text-sm font-semibold text-red-400">
+        <p className="ar mt-lg rounded-lg bg-error/10 px-md py-sm text-sm font-semibold text-error">
           ⚠️ {error}
         </p>
       )}
-
-      {opps && opps.length > 0 && (
-        <div className="mt-6 grid gap-4 lg:grid-cols-3">
+      {opps && (
+        <div className="mt-lg grid gap-md lg:grid-cols-3">
           {opps.map((o) => (
-            <OpportunityCard
-              key={o.rank}
-              opp={o}
-              emoji={emojiForTitle(o.title_ar)}
-            />
+            <OpportunityCard key={o.id} opp={o} emoji={emojiForTitle(o.title_ar)} />
           ))}
         </div>
       )}
@@ -296,23 +326,19 @@ function SectionC({ needs }: { needs: Need[] }) {
   );
 }
 
-/* Section D — Full submissions table */
-function SectionD({ needs }: { needs: Need[] }) {
+function TableSection({ needs }: { needs: Need[] }) {
   return (
-    <section className="mb-10 rounded-2xl border border-gray-800 bg-card p-5 sm:p-6">
-      <h2 className="ar mb-1 text-xl font-bold">كل الاحتياجات المسجّلة</h2>
-      <p className="en-dark mb-4">All submissions — filterable</p>
+    <section id="table" className="glass-panel card-top-light rounded-xl p-lg">
+      <h2 className="ar text-body-lg font-bold text-on-surface">كل الاحتياجات المسجّلة</h2>
+      <p className="en mb-md">All submissions — filterable</p>
       <NeedsTable needs={needs} />
     </section>
   );
 }
 
-/* Best-effort emoji for an opportunity card header based on its Arabic title. */
 function emojiForTitle(title: string): string {
-  if (title.includes("إبل") || title.includes("هجن") || title.includes("حليب"))
-    return "🐪";
-  if (title.includes("نجوم") || title.includes("فلك") || title.includes("صحراء"))
-    return "⭐";
+  if (title.includes("إبل") || title.includes("هجن") || title.includes("حليب")) return "🐪";
+  if (title.includes("نجوم") || title.includes("فلك") || title.includes("صحراء")) return "⭐";
   if (
     title.includes("خبز") ||
     title.includes("تمر") ||
@@ -321,9 +347,7 @@ function emojiForTitle(title: string): string {
     title.includes("ألبان")
   )
     return "🥛";
-  if (title.includes("صيانة") || title.includes("تكييف") || title.includes("بناء"))
-    return "🏠";
-  if (title.includes("تقني") || title.includes("هواتف") || title.includes("واي"))
-    return "🔧";
+  if (title.includes("صيانة") || title.includes("تكييف") || title.includes("بناء")) return "🏠";
+  if (title.includes("تقني") || title.includes("هواتف") || title.includes("واي")) return "🔧";
   return "💡";
 }
