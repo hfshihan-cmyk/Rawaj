@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Cairo } from "next/font/google";
+import NavBar from "@/components/NavBar";
 import "./globals.css";
 
 const cairo = Cairo({
@@ -42,18 +43,15 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        {/* Geist (English) + JetBrains Mono (data) + Material Symbols (icons) */}
+        {/* Geist (English) + JetBrains Mono (data labels) */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="bg-background text-on-surface antialiased">
-        {children}
+      <body className="min-h-screen relative overflow-x-hidden bg-[#051424] text-[#d4e4fa] antialiased selection:bg-[#4fdbc8]/30 selection:text-white">
+        <NavBar />
+        <div className="pt-24 min-h-screen flex flex-col">{children}</div>
       </body>
     </html>
   );

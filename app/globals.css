@@ -5,7 +5,7 @@
 :root {
   --font-cairo: "Cairo", system-ui, sans-serif;
   --font-geist: "Geist", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
 html {
@@ -14,107 +14,58 @@ html {
 }
 
 body {
-  font-family: var(--font-cairo);
+  background-color: #051424;
   color: #d4e4fa;
+  font-family: "Geist", var(--font-cairo), ui-sans-serif, system-ui, sans-serif;
 }
 
-/* Arabic text renders slightly larger than the English sub-labels beneath it. */
-.ar {
-  font-family: var(--font-cairo);
-  font-size: 1.0625em;
-  line-height: 1.6;
+.font-mono {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
-.en {
-  font-family: var(--font-geist);
-  font-size: 0.8125rem;
-  letter-spacing: 0.01em;
-  color: #c6c6cc;
+.font-sans {
+  font-family: "Geist", var(--font-cairo), ui-sans-serif, system-ui, sans-serif;
 }
 
-/* ---- Stitch glassmorphism + depth utilities ---- */
-.glass-panel {
-  background: rgba(15, 23, 42, 0.7);
+/* ---- Glassmorphism (from the design system) ---- */
+.glass {
+  background: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+.glass-teal {
+  border-top: 1px solid rgba(79, 219, 200, 0.35);
+}
+
 .teal-glow {
-  box-shadow: 0 0 20px 0 rgba(79, 219, 200, 0.1);
+  box-shadow: 0 0 20px rgba(79, 219, 200, 0.1);
 }
 
-/* "Light from above" — subtle teal top-border gradient on cards. */
-.card-top-light {
-  border-top: 1px solid transparent;
-  border-image: linear-gradient(to right, rgba(79, 219, 200, 0.5), transparent) 1;
+.teal-glow-hover:hover {
+  box-shadow: 0 0 30px rgba(79, 219, 200, 0.2);
 }
 
-.bg-grid-pattern {
+.grid-bg {
+  background-size: 40px 40px;
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 24px 24px;
+    linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
 }
 
-.watermark {
-  position: absolute;
-  font-size: 16rem;
-  font-weight: 900;
-  color: rgba(255, 255, 255, 0.025);
-  z-index: 0;
-  user-select: none;
-  pointer-events: none;
-  line-height: 1;
+/* Thin scrollbar for leaderboard / tables */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
-
-/* Material Symbols icon font defaults */
-.material-symbols-outlined {
-  font-family: "Material Symbols Outlined";
-  font-weight: normal;
-  font-style: normal;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  direction: ltr;
-  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
 }
-
-/* Tabular numerals for data, isolated for RTL */
-.nums {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
-  direction: ltr;
-  unicode-bidi: isolate;
-}
-
-/* Thin custom scrollbar for the dashboard table */
-.thin-scroll::-webkit-scrollbar {
-  height: 8px;
-  width: 8px;
-}
-.thin-scroll::-webkit-scrollbar-track {
-  background: #010f1f;
-}
-.thin-scroll::-webkit-scrollbar-thumb {
-  background: #1c2b3c;
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(79, 219, 200, 0.25);
   border-radius: 9999px;
 }
-.thin-scroll::-webkit-scrollbar-thumb:hover {
-  background: #4fdbc8;
-}
-
-/* Confetti particle (success state) */
-.confetti-piece {
-  position: fixed;
-  top: -10vh;
-  width: 9px;
-  height: 14px;
-  border-radius: 2px;
-  animation-name: confetti-fall;
-  animation-timing-function: cubic-bezier(0.3, 0.1, 0.4, 1);
-  animation-fill-mode: forwards;
-  z-index: 60;
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(79, 219, 200, 0.5);
 }

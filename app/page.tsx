@@ -1,250 +1,197 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { motion } from "motion/react";
+import { Activity, AlertCircle, ArrowLeft, Layers } from "lucide-react";
 import StarrySky from "@/components/StarrySky";
-import { ACTIVE_COMMUNITY } from "@/lib/communities";
-import { countByCategory, getSeeds } from "@/lib/dataUtils";
+import { getMergedNeeds, getSeeds } from "@/lib/dataUtils";
 
 export default function LandingPage() {
-  const seeds = getSeeds();
-  const total = seeds.length;
-  const counts = countByCategory(seeds);
-  const camelPct = Math.round((counts.camel / total) * 100);
+  // Initialise from static seeds (stable for SSR), then merge localStorage on mount.
+  const [total, setTotal] = useState(() => getSeeds().length);
+  const [camelPercent, setCamelPercent] = useState(() => {
+    const s = getSeeds();
+    return Math.round((s.filter((n) => n.category === "camel").length / s.length) * 100) || 0;
+  });
+
+  useEffect(() => {
+    const all = getMergedNeeds();
+    setTotal(all.length);
+    setCamelPercent(
+      Math.round((all.filter((n) => n.category === "camel").length / all.length) * 100) || 0,
+    );
+  }, []);
 
   return (
-    <div className="flex min-h-screen flex-col overflow-x-hidden bg-background text-on-surface">
-      {/* Nav */}
-      <nav className="fixed top-0 z-50 w-full border-b border-white/5 bg-surface/80 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-container-max flex-row-reverse items-center justify-between px-lg py-md">
-          <Link href="/" className="font-geist text-2xl font-bold tracking-tighter">
-            رواج <span className="text-secondary">Rawaj</span>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="relative flex-grow flex flex-col justify-between"
+    >
+      {/* Starry sky backdrop */}
+      <StarrySky className="absolute inset-0 w-full h-full pointer-events-none" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-16 pb-24 w-full flex-grow flex flex-col items-center justify-center text-center">
+        {/* Pulse badge */}
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#4fdbc8]/10 border border-[#4fdbc8]/20 mb-8 animate-pulse">
+          <span className="w-2.5 h-2.5 rounded-full bg-[#4fdbc8]"></span>
+          <span className="font-mono text-xs text-[#4fdbc8] uppercase tracking-wider">
+            ● LIVE MARKET INTELLIGENCE
+          </span>
+        </div>
+
+        {/* Giant Arabic headline */}
+        <h1 className="font-sans text-4xl sm:text-6xl font-extrabold text-[#d4e4fa] leading-tight max-w-4xl tracking-tight">
+          رواد الأعمال في القوع <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-l from-[#4fdbc8] to-[#ffb95f]">
+            يقررون في الظلام
+          </span>
+        </h1>
+
+        <p className="mt-6 text-sm sm:text-base text-[#c6c6cc] max-w-2xl leading-relaxed font-sans">
+          Intelligence platform for traditional trade. Bridging the gap between rural
+          entrepreneurship and high-velocity market data. Stop guessing, start scaling.
+        </p>
+
+        {/* CTAs */}
+        <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md">
+          <Link
+            href="/submit"
+            className="flex-1 bg-[#14b8a6] text-[#051424] font-bold py-4 px-6 rounded-lg shadow-[0_4px_14px_rgba(20,184,166,0.3)] hover:shadow-[0_6px_20px_rgba(20,184,166,0.5)] hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2"
+          >
+            <span>سجّل احتياجك 🐪</span>
           </Link>
-          <div className="hidden flex-row-reverse items-center gap-lg md:flex">
-            <Link href="/dashboard" className="font-geist text-body-md text-on-surface-variant transition-colors hover:text-secondary">
-              الأسواق Markets
-            </Link>
-            <Link href="/dashboard" className="font-geist text-body-md text-on-surface-variant transition-colors hover:text-secondary">
-              التقارير Reports
-            </Link>
-            <Link href="/dashboard" className="font-geist text-body-md text-on-surface-variant transition-colors hover:text-secondary">
-              الرؤى Insights
-            </Link>
-          </div>
-          <div className="flex flex-row-reverse items-center gap-md">
-            <Link
-              href="/dashboard"
-              className="rounded-lg bg-secondary px-lg py-sm font-geist text-body-md text-on-secondary shadow-[0_4px_14px_0_rgba(79,219,200,0.39)] transition-all duration-300 hover:scale-105 active:scale-95"
-            >
-              لوحة التحكم
-            </Link>
-          </div>
-        </div>
-      </nav>
-
-      <main className="relative flex-grow pt-[100px]">
-        {/* Animated star background */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 h-full w-full opacity-70 mix-blend-screen">
-            <StarrySky className="h-full w-full" />
-          </div>
-          <div className="absolute inset-0 z-10 bg-gradient-to-b from-background/40 via-background/80 to-background" />
+          <Link
+            href="/dashboard"
+            className="flex-1 border border-[#ffb95f] text-[#ffb95f] hover:bg-[#ffb95f]/15 font-bold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 group"
+          >
+            <span>لوحة الريادي 📊</span>
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform rtl:rotate-180" />
+          </Link>
         </div>
 
-        {/* Hero */}
-        <div className="relative z-20 mx-auto flex min-h-[78vh] max-w-container-max flex-col items-center justify-center px-lg pb-[100px] pt-xl text-center">
-          <div className="mb-lg inline-flex items-center gap-xs rounded-full border border-secondary/20 bg-secondary/10 px-sm py-xs backdrop-blur-md">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-secondary" />
-            <span className="font-mono text-label-sm uppercase text-secondary">
-              Live Market Intelligence
-            </span>
-          </div>
-
-          <h1 className="ar mb-md max-w-4xl text-display-lg-mobile leading-tight md:text-display-lg">
-            رواد الأعمال في القوع
-            <br className="hidden md:block" />
-            <span className="bg-gradient-to-l from-secondary to-tertiary bg-clip-text text-transparent">
-              يقررون في الظلام
-            </span>
-          </h1>
-
-          <p className="en mb-xl max-w-2xl !text-base text-on-surface-variant">
-            Intelligence platform for traditional trade. Bridging the gap between
-            rural entrepreneurship and high-velocity market data. Stop guessing,
-            start scaling.
-          </p>
-
-          <div className="mb-[64px] flex flex-col gap-md sm:flex-row">
-            <Link
-              href="/submit"
-              className="ar flex items-center justify-center gap-sm rounded-lg bg-secondary px-xl py-md text-body-md text-on-secondary shadow-[0_4px_14px_0_rgba(79,219,200,0.39)] transition-all duration-300 hover:scale-105 active:scale-95"
-            >
-              سجّل احتياجك 🐪
-            </Link>
-            <Link
-              href="/dashboard"
-              className="ar group flex items-center justify-center gap-sm rounded-lg border border-tertiary bg-transparent px-xl py-md text-body-md text-tertiary transition-all duration-300 hover:bg-tertiary/10"
-            >
-              لوحة الريادي 📊
-              <span className="material-symbols-outlined text-[18px] transition-transform group-hover:-translate-x-1">
-                arrow_back
+        {/* Bento stats */}
+        <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl text-right">
+          {/* Registered needs */}
+          <div className="glass rounded-xl p-6 relative overflow-hidden group hover:border-[#4fdbc8]/30 transition-all duration-300 teal-glow">
+            <div className="absolute right-4 top-4 bg-[#4fdbc8]/10 text-[#4fdbc8] p-3 rounded-lg">
+              <Layers className="w-6 h-6" />
+            </div>
+            <div className="mt-12">
+              <span className="block font-mono text-4xl font-extrabold text-[#d4e4fa]">{total}</span>
+              <span className="block text-xs font-bold text-[#c6c6cc] uppercase tracking-wider mt-2">
+                حاجة مسجّلة (Registered Needs)
               </span>
-            </Link>
+            </div>
+            <div className="mt-6 w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+              <div className="h-full bg-[#4fdbc8] rounded-full transition-all duration-1000 w-[80%]"></div>
+            </div>
           </div>
 
-          {/* Bento stats */}
-          <div className="grid w-full max-w-5xl grid-cols-1 gap-lg md:grid-cols-3">
-            <StatCard
-              icon="app_registration"
-              tone="teal"
-              value={String(total)}
-              labelAr="حاجة مسجّلة"
-              labelEn="Registered Needs"
-              barPct={80}
-            />
-            <StatCard
-              icon="pets"
-              tone="gold"
-              value={`${camelPct}%`}
-              labelAr="خدمات إبل"
-              labelEn="Camel Services"
-              barPct={camelPct}
-            />
-            <StatCard
-              icon="warning"
-              tone="error"
-              value="0"
-              labelAr="مزودين"
-              labelEn="Providers"
-              note="High Opportunity Market"
-            />
+          {/* Camel demand */}
+          <div className="glass rounded-xl p-6 relative overflow-hidden group hover:border-[#ffb95f]/30 transition-all duration-300">
+            <div className="absolute right-4 top-4 bg-[#ffb95f]/10 text-[#ffb95f] p-3 rounded-lg">
+              <Activity className="w-6 h-6" />
+            </div>
+            <div className="mt-12">
+              <span className="block font-mono text-4xl font-extrabold text-[#d4e4fa]">
+                {camelPercent}%
+              </span>
+              <span className="block text-xs font-bold text-[#c6c6cc] uppercase tracking-wider mt-2">
+                خدمات إبل (Camel Services)
+              </span>
+            </div>
+            <div className="mt-6 w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-[#ffb95f] rounded-full transition-all duration-1000"
+                style={{ width: `${camelPercent}%` }}
+              ></div>
+            </div>
+          </div>
+
+          {/* Providers gap */}
+          <div className="glass rounded-xl p-6 relative overflow-hidden border border-red-500/20 group hover:border-red-500/40 transition-all duration-300 shadow-[0_0_30px_rgba(239,68,68,0.05)]">
+            <div className="absolute right-4 top-4 bg-red-500/10 text-red-400 p-3 rounded-lg">
+              <AlertCircle className="w-6 h-6" />
+            </div>
+            <div className="mt-12">
+              <span className="block font-mono text-4xl font-extrabold text-red-400">0</span>
+              <span className="block text-xs font-bold text-red-300/80 uppercase tracking-wider mt-2">
+                مزودين حاليين (Current Providers)
+              </span>
+            </div>
+            <div className="mt-6 text-xs text-red-400 font-bold tracking-wide uppercase flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+              High Opportunity Market
+            </div>
           </div>
         </div>
 
         {/* How it works */}
-        <section className="relative z-20 border-y border-white/5 bg-surface-container-lowest py-xl">
-          <div className="mx-auto max-w-container-max px-lg">
-            <div className="mb-xl text-center">
-              <h2 className="ar text-headline-md">آلية العمل (How it works)</h2>
-              <p className="en mt-sm">Three minimal steps to market dominance.</p>
-            </div>
-            <div className="relative grid grid-cols-1 gap-xl md:grid-cols-3">
-              <div className="absolute right-[15%] left-[15%] top-[40px] z-0 hidden h-px bg-gradient-to-r from-transparent via-secondary/30 to-transparent md:block" />
-              <Step icon="add_circle" tone="teal" numAr="١. سجّل" en="Register" desc="Input raw market demands and resource gaps securely." />
-              <Step icon="monitoring" tone="gold" highlight numAr="٢. حلّل" en="Analyze" desc="Our system cross-references data to reveal hidden patterns." />
-              <Step icon="rocket_launch" tone="teal" numAr="٣. نمّو" en="Grow" desc="Deploy capital efficiently into proven high-demand vectors." />
-            </div>
+        <div className="mt-32 w-full max-w-5xl">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#d4e4fa]">آلية العمل (How it works)</h2>
+            <p className="text-xs sm:text-sm text-[#c6c6cc] mt-2">
+              Three minimal steps to market dominance.
+            </p>
           </div>
-        </section>
-      </main>
 
-      <Footer community={`${ACTIVE_COMMUNITY.name_en}`} />
-    </div>
-  );
-}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+            <div className="hidden md:block absolute top-12 left-1/6 right-1/6 h-[1px] border-t border-dashed border-white/10 z-0"></div>
 
-function StatCard({
-  icon,
-  tone,
-  value,
-  labelAr,
-  labelEn,
-  barPct,
-  note,
-}: {
-  icon: string;
-  tone: "teal" | "gold" | "error";
-  value: string;
-  labelAr: string;
-  labelEn: string;
-  barPct?: number;
-  note?: string;
-}) {
-  const toneClasses = {
-    teal: "bg-secondary/10 text-secondary",
-    gold: "bg-tertiary/10 text-tertiary",
-    error: "bg-error/10 text-error",
-  }[tone];
-  const valueColor = tone === "error" ? "text-error" : "text-on-surface";
-  const barColor = tone === "gold" ? "bg-tertiary" : "bg-secondary";
-
-  return (
-    <div
-      className={`glass-panel card-top-light relative flex flex-col items-start overflow-hidden rounded-xl p-lg text-right transition-transform duration-300 hover:-translate-y-1 ${
-        tone !== "error" ? "teal-glow" : "border-t border-error/40"
-      }`}
-    >
-      {tone === "error" && (
-        <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-error/10 blur-2xl" />
-      )}
-      <div className={`relative z-10 mb-md rounded-lg p-sm ${toneClasses}`}>
-        <span className="material-symbols-outlined">{icon}</span>
-      </div>
-      <div className={`nums relative z-10 mb-xs text-display-lg-mobile ${valueColor}`}>
-        {value}
-      </div>
-      <div className="relative z-10 font-mono text-label-sm uppercase text-on-surface-variant">
-        <span className="ar">{labelAr}</span> ({labelEn})
-      </div>
-      {typeof barPct === "number" && (
-        <div className="mt-md h-1 w-full overflow-hidden rounded-full bg-surface-container-high">
-          <div className={`h-full rounded-full ${barColor}`} style={{ width: `${barPct}%` }} />
+            <Step num="١" titleAr="سجّل (Register)" desc="Input raw market demands and resource gaps securely." />
+            <Step
+              num="٢"
+              titleAr="حلّل (Analyze)"
+              desc="Our system cross-references data to reveal hidden patterns."
+              highlight
+            />
+            <Step num="٣" titleAr="نمّو (Grow)" desc="Deploy capital efficiently into proven high-demand vectors." />
+          </div>
         </div>
-      )}
-      {note && (
-        <div className="relative z-10 mt-md font-mono text-label-sm text-on-surface-variant">
-          {note}
+      </div>
+
+      {/* Footer */}
+      <footer className="w-full py-12 px-6 glass border-t border-white/5 relative z-20 flex flex-col md:flex-row-reverse justify-between items-center gap-6 max-w-7xl mx-auto rounded-t-xl">
+        <div className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-l from-[#4fdbc8] to-[#ffb95f]">
+          رواج Rawaj
         </div>
-      )}
-    </div>
+        <div className="flex gap-6 text-xs text-[#c6c6cc]">
+          <a href="#" className="hover:text-[#4fdbc8] transition-colors">الشروط Terms</a>
+          <a href="#" className="hover:text-[#4fdbc8] transition-colors">الخصوصية Privacy</a>
+          <a href="#" className="hover:text-[#4fdbc8] transition-colors">اتصل بنا Contact</a>
+        </div>
+        <div className="text-xs font-mono text-[#4fdbc8]">صنع في القوع • Made in Al Qua&apos;a</div>
+      </footer>
+    </motion.div>
   );
 }
 
 function Step({
-  icon,
-  tone,
-  numAr,
-  en,
+  num,
+  titleAr,
   desc,
   highlight,
 }: {
-  icon: string;
-  tone: "teal" | "gold";
-  numAr: string;
-  en: string;
+  num: string;
+  titleAr: string;
   desc: string;
   highlight?: boolean;
 }) {
   return (
-    <div className="relative z-10 flex flex-col items-center text-center">
+    <div className="flex flex-col items-center relative z-10">
       <div
-        className={`mb-md flex h-[80px] w-[80px] items-center justify-center rounded-full bg-surface shadow-lg ${
-          highlight ? "teal-glow border border-secondary/30" : "border border-white/10 shadow-black/50"
+        className={`w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold transition-all ${
+          highlight
+            ? "bg-[#0f172a] border border-[#4fdbc8] text-[#ffb95f] shadow-[0_0_20px_rgba(79,219,200,0.2)]"
+            : "bg-[#051424] border border-white/10 text-[#4fdbc8] hover:border-[#4fdbc8] hover:shadow-[0_0_15px_rgba(79,219,200,0.2)]"
         }`}
       >
-        <span className={`material-symbols-outlined text-[32px] ${tone === "gold" ? "text-tertiary" : "text-secondary"}`}>
-          {icon}
-        </span>
+        {num}
       </div>
-      <h3 className="ar text-body-lg">
-        {numAr} <span className="en align-middle">({en})</span>
-      </h3>
-      <p className="en mt-xs max-w-[220px]">{desc}</p>
+      <h3 className="text-lg font-bold text-[#d4e4fa] mt-4">{titleAr}</h3>
+      <p className="text-xs text-[#c6c6cc] mt-1 max-w-xs">{desc}</p>
     </div>
-  );
-}
-
-function Footer({ community }: { community: string }) {
-  return (
-    <footer className="relative z-20 flex w-full flex-col items-center justify-between gap-md border-t border-white/5 bg-surface-container-lowest px-lg py-xl md:flex-row-reverse">
-      <div className="font-geist text-headline-md font-bold tracking-tight">
-        رواج <span className="text-secondary">Rawaj</span>
-      </div>
-      <div className="flex gap-md font-mono text-label-sm">
-        <span className="text-outline">Tatweer 2026</span>
-        <span className="text-outline">Challenge #3</span>
-        <span className="text-outline">Reef Dev Team</span>
-      </div>
-      <div className="font-mono text-label-sm text-secondary">
-        صنع في القوع • Made in {community}
-      </div>
-    </footer>
   );
 }
