@@ -10,12 +10,12 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  background: #051424;
+  background: #faf4ec;
 }
 
 body {
-  background-color: #051424;
-  color: #d4e4fa;
+  background-color: #faf4ec;
+  color: #4a3728;
   font-family: "Geist", var(--font-cairo), ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -27,34 +27,39 @@ body {
   font-family: "Geist", var(--font-cairo), ui-sans-serif, system-ui, sans-serif;
 }
 
-/* ---- Glassmorphism (from the design system) ---- */
+/* Dark glassmorphism — landing page over the desert image */
 .glass {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(10, 20, 30, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.glass-teal {
-  border-top: 1px solid rgba(79, 219, 200, 0.35);
+/* Navbar glass on landing page */
+.glass-strong {
+  background: rgba(15, 30, 40, 0.55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.teal-glow {
-  box-shadow: 0 0 20px rgba(79, 219, 200, 0.1);
+/* Landing hero stat cards — translucent warm tint over dark section */
+.stat-card {
+  background: rgba(250, 244, 236, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.teal-glow-hover:hover {
-  box-shadow: 0 0 30px rgba(79, 219, 200, 0.2);
-}
-
+/* Grid background — kept for landing hero overlay effect */
 .grid-bg {
   background-size: 40px 40px;
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
 }
 
-/* Thin scrollbar for leaderboard / tables */
+/* Thin scrollbar — sand tones */
 .scrollbar-thin::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -63,9 +68,9 @@ body {
   background: transparent;
 }
 .scrollbar-thin::-webkit-scrollbar-thumb {
-  background: rgba(79, 219, 200, 0.25);
+  background: rgba(196, 149, 106, 0.3);
   border-radius: 9999px;
 }
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: rgba(79, 219, 200, 0.5);
+  background: rgba(196, 149, 106, 0.55);
 }

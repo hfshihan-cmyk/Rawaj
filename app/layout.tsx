@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Cairo } from "next/font/google";
 import NavBar from "@/components/NavBar";
+import { ClientLayout } from "@/components/ClientLayout";
 import "./globals.css";
 
 const cairo = Cairo({
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#051424",
+  themeColor: "#1a3a4a",
   width: "device-width",
   initialScale: 1,
 };
@@ -35,7 +36,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ar" dir="rtl" className={`dark ${cairo.variable}`}>
+    <html lang="en" dir="ltr" className={`dark ${cairo.variable}`}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -43,15 +44,16 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        {/* Geist (English) + JetBrains Mono (data labels) */}
         <link
           href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen relative overflow-x-hidden bg-[#051424] text-[#d4e4fa] antialiased selection:bg-[#4fdbc8]/30 selection:text-white">
-        <NavBar />
-        <div className="pt-24 min-h-screen flex flex-col">{children}</div>
+      <body className="min-h-screen relative overflow-x-hidden antialiased selection:bg-[#c4956a]/30 selection:text-white">
+        <ClientLayout>
+          <NavBar />
+          <div className="pt-24 min-h-screen flex flex-col">{children}</div>
+        </ClientLayout>
       </body>
     </html>
   );
