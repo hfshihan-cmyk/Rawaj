@@ -88,7 +88,7 @@ Verify: Fork this repo. Go to vercel.com → Import Project → select your fork
 **Who maintains it**: Al Ain University Computer Science Department, in partnership with the Innovation and Entrepreneurship Centre (EISC), as part of post-hackathon incubation. The Khalifa Fund for Enterprise Development has been identified as the institutional deployment partner for the Al Ain region.
 
 **Deployment playbook** (zero technical knowledge required):
-1. Go to `github.com/hasanshihan/rawaj` → click **Fork** → Create fork
+1. Go to `github.com/hfshihan-cmyk/Rawaj` → click **Fork** → Create fork
 2. Go to `vercel.com` → Sign in with GitHub → **Import Project** → select your fork
 3. Click **Deploy** — no settings to change, no environment variables to add
 4. Go to any QR code generator → create a QR for `your-deployment.vercel.app/submit`
@@ -117,7 +117,7 @@ Architecture: every data record carries a `community_id` field. Every neighbourh
 ## Quick Start
 
 ```bash
-git clone https://github.com/hasanshihan/rawaj
+git clone https://github.com/hfshihan-cmyk/Rawaj
 cd rawaj
 npm install
 npm run dev
