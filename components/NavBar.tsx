@@ -76,20 +76,6 @@ export default function NavBar() {
 
       {/* Action buttons */}
       <div className="flex items-center gap-3">
-        <Link
-          href="/dashboard"
-          className="hidden sm:inline-flex text-white text-xs font-bold px-4 py-2 rounded transition-all hover:opacity-90 hover:scale-[1.03]"
-          style={{ background: "#c4956a" }}
-        >
-          {t("nav_btn")}
-        </Link>
-        <Link
-          href="/submit"
-          className="sm:hidden inline-flex text-white text-xs font-bold px-3 py-1.5 rounded transition-colors"
-          style={{ background: "#c4956a" }}
-        >
-          {t("nav_mobile_btn")} 🐪
-        </Link>
         <button
           onClick={toggle}
           aria-label={lang === "en" ? "Switch to Arabic" : "Switch to English"}

@@ -8,10 +8,10 @@ import type { CategoryKey } from "@/lib/types";
  * untouched — this only controls how each category is rendered.
  */
 export const CATEGORY_UI: Record<CategoryKey, { icon: LucideIcon; color: string }> = {
-  camel: { icon: Activity, color: "text-[#ffb95f]" },
-  food: { icon: Milk, color: "text-[#4fdbc8]" },
-  tourism: { icon: Compass, color: "text-[#4fdbc8]" },
-  home: { icon: Wrench, color: "text-[#ffb95f]" },
-  tech: { icon: Cpu, color: "text-[#4fdbc8]" },
+  camel: { icon: Activity, color: "text-[#f59e0b]" },
+  food: { icon: Milk, color: "text-[#14b8a6]" },
+  tourism: { icon: Compass, color: "text-[#14b8a6]" },
+  home: { icon: Wrench, color: "text-[#f59e0b]" },
+  tech: { icon: Cpu, color: "text-[#14b8a6]" },
   other: { icon: Package, color: "text-[#c6c6cc]" },
 };

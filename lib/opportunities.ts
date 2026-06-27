@@ -42,7 +42,11 @@ export const OPPORTUNITIES: OpportunityTemplate[] = [
     gap_analysis_en:
       "26 of 60 community needs are camel-related, yet no local operator processes and packages fresh camel milk daily. Farm owners sell raw milk cheaply or waste surplus, while demand for a clean, packaged product across Al Qua'a and Al Ain stays unmet.",
     market_size_ar: "AED 4.2M",
+    market_size_source: "ADAFSA Agricultural Report 2023 — UAE camel milk market value",
     competition_ar: "منخفضة",
+    competition_en: "Low",
+    cost_estimate_en: "Medium — AED 5,000–15,000 to start",
+    support_entity_en: "Khalifa Fund for Enterprise Development",
   },
   {
     id: "2",
@@ -69,7 +73,11 @@ export const OPPORTUNITIES: OpportunityTemplate[] = [
     gap_analysis_en:
       "9 Al Qua'a residents requested stargazing services while current providers number zero. Sitting on the Tropic of Cancer with very low light pollution, Al Qua'a is a commercially untapped astro-tourism asset next to the large Abu Dhabi and Al Ain markets.",
     market_size_ar: "AED 1.8M",
+    market_size_source: "DCT Abu Dhabi Desert Tourism Pricing Report 2024 — comparable Al Ain region tours",
     competition_ar: "معدومة",
+    competition_en: "None",
+    cost_estimate_en: "Low — Under AED 5,000 to start",
+    support_entity_en: "Abu Dhabi Dept. of Culture & Tourism",
   },
   {
     id: "3",
@@ -96,7 +104,11 @@ export const OPPORTUNITIES: OpportunityTemplate[] = [
     gap_analysis_en:
       "15 community needs relate to food and local products, with dates the standout. Farms sell dates loose with no value-adding packaging, while the market wants ready gift boxes — simple packaging lifts the margin on the same produce.",
     market_size_ar: "AED 2.4M",
+    market_size_source: "Al Ain Friday Market price survey 2024 — branded vs unbranded dates (3× premium)",
     competition_ar: "منخفضة",
+    competition_en: "Low",
+    cost_estimate_en: "Low — Under AED 7,000 to start",
+    support_entity_en: "Khalifa Fund / Local Cooperative",
   },
 ];
 

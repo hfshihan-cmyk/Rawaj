@@ -16,8 +16,6 @@ import { saveLocalNeed } from "@/lib/dataUtils";
 import { useLang } from "@/lib/LanguageContext";
 import type { CategoryKey, Frequency, Need } from "@/lib/types";
 
-const MASCOT =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuDMjtC39EYbsHKpeHvhpza7z2b0OIMmUKGatJcupmamNFQ4PWNNGyWsJEM0IFi7a3UwdKEuGQobdA65dgOX2i5ZtS6YTmaQRbVh7DlcA8JM1Ifm7nOr9HrniMwf75W7I2cKot5zM7xjjNel9jFElTc7lkp9-y-stMMpVKNGCE-np04LXKELCWWnYFDM1zMkWxv55TXK7sjckCITO44w7Q132oF8-nTeDNhHUeCgMzfeOlIaYbZT8440xyBc84s34y1UMSV-0OzN9i4";
 
 export default function SubmitPage() {
   const router = useRouter();
@@ -62,18 +60,8 @@ export default function SubmitPage() {
         <span>{t("submit_back")}</span>
       </Link>
 
-      {/* Mascot */}
+      {/* Header */}
       <div className="text-center mb-10">
-        <div className="w-40 h-40 mx-auto relative mb-6">
-          <div className="absolute inset-0 bg-[#c4956a]/10 rounded-full blur-2xl"></div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={MASCOT}
-            alt="Rawaj Camel Mascot"
-            referrerPolicy="no-referrer"
-            className="w-full h-full object-contain relative z-10 drop-shadow-2xl"
-          />
-        </div>
         <h1 className="text-3xl font-extrabold text-[#1a3a4a]">
           {t("submit_title")}
         </h1>

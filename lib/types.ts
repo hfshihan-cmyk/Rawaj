@@ -56,5 +56,9 @@ export interface Opportunity {
   gap_analysis_en: string;
   first_step_en: string;
   market_size_ar: string;
+  market_size_source?: string;
   competition_ar: string;
+  competition_en: string;
+  cost_estimate_en: string;
+  support_entity_en: string;
 }

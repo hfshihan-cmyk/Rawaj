@@ -169,54 +169,69 @@ export default function DashboardPage() {
           {/* Chart + leaderboard */}
           <div className="grid grid-cols-1 xl:grid-cols-5 gap-6">
             {/* Bar chart */}
-            <div className={`${CARD} xl:col-span-3 p-6 flex flex-col h-[380px]`}>
-              <div className="flex justify-between items-center mb-6">
+            <div className={`${CARD} xl:col-span-3 p-6 flex flex-col`} style={{ height: "380px" }}>
+              <div className="flex justify-between items-center mb-4">
                 <div className="flex gap-4 text-[10px] font-mono">
-                  <span className="flex items-center gap-1 text-[#c4956a]">
-                    <span className="w-2.5 h-2.5 bg-[#c4956a] rounded-sm"></span>
+                  <span className="flex items-center gap-1" style={{ color: "#c4956a" }}>
+                    <span className="w-2.5 h-2.5 rounded-sm" style={{ background: "#c4956a" }}></span>
                     {t("dash_chart_primary")}
-                  </span>
-                  <span className="flex items-center gap-1 text-[#d4a017]">
-                    <span className="w-2.5 h-2.5 bg-[#d4a017] rounded-sm"></span>
-                    {t("dash_chart_secondary")}
                   </span>
                 </div>
                 <h3 className="text-sm font-mono font-bold text-[#8b7355] uppercase tracking-wider">
                   {t("dash_chart_title")}
                 </h3>
               </div>
-              <div className="flex-1 relative border-b border-s border-[#e8d5b7] flex items-end justify-around pb-4 pt-10 px-4 group">
-                {CATEGORIES.map((c) => {
-                  const count = stats.counts[c.key] || 0;
-                  const heightPercent = Math.max((count / maxCount) * 80, 5);
-                  const isSpecial = c.key === "camel" || c.key === "tourism" || c.key === "food";
-                  return (
-                    <div
-                      key={c.key}
-                      className="flex flex-col items-center gap-2 group/bar relative w-8 sm:w-12"
-                    >
+
+              {/* Bars — pixel heights so percentage-resolution issues can't occur */}
+              <div className="flex-1 flex flex-col min-h-0">
+                <div
+                  className="flex-1 flex items-end justify-around gap-1 px-2"
+                  style={{ borderBottom: "1px solid #e8d5b7", borderLeft: "1px solid #e8d5b7" }}
+                >
+                  {CATEGORIES.map((c) => {
+                    const count = stats.counts[c.key] || 0;
+                    const BAR_MAX_PX = 170;
+                    const barH = maxCount > 0 && count > 0
+                      ? Math.max(Math.round((count / maxCount) * BAR_MAX_PX), 4)
+                      : 0;
+                    return (
                       <div
-                        className={`w-full rounded-t-sm transition-all duration-1000 ${
-                          isSpecial
-                            ? "bg-[#c4956a] hover:bg-[#b07d4a]"
-                            : "bg-[#e8d5b7] group-hover/bar:bg-[#c4956a]/50"
-                        }`}
-                        style={{ height: needs.length ? `${heightPercent}%` : "0%" }}
-                      ></div>
-                      <span className="text-[10px] sm:text-xs text-[#8b7355] truncate max-w-full font-mono font-bold">
+                        key={c.key}
+                        className="flex flex-col items-center flex-1 min-w-0 group/bar cursor-default"
+                        title={`${lang === "ar" ? c.ar : c.en}: ${count} ${t("dash_chart_requests")}`}
+                      >
+                        {/* Count label above bar */}
+                        <span
+                          className="text-[11px] font-bold font-mono mb-1 transition-opacity duration-500"
+                          style={{ color: "#1a3a4a", opacity: count > 0 ? 1 : 0 }}
+                        >
+                          {count > 0 ? count : "·"}
+                        </span>
+                        {/* Bar */}
+                        <div
+                          className="w-full rounded-t-sm transition-all duration-700 ease-out"
+                          style={{
+                            height: `${barH}px`,
+                            backgroundColor: barH > 0 ? "#c4956a" : "#e8d5b7",
+                            maxWidth: "40px",
+                            opacity: barH > 0 ? 1 : 0.4,
+                          }}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Category labels row */}
+                <div className="flex justify-around px-2 pt-2">
+                  {CATEGORIES.map((c) => (
+                    <div key={c.key} className="flex-1 flex justify-center min-w-0">
+                      <span className="text-[9px] sm:text-[10px] text-[#8b7355] font-mono font-bold text-center leading-tight">
                         {(lang === "ar" ? c.ar : c.en).slice(0, 6)}
                       </span>
-                      <div className="absolute bottom-full mb-2 opacity-0 group-hover/bar:opacity-100 scale-90 group-hover/bar:scale-100 transition-all duration-200 pointer-events-none bg-[#1a3a4a] border border-[#e8d5b7]/20 rounded px-2.5 py-1.5 text-[11px] font-mono whitespace-nowrap z-40 shadow-xl">
-                        <span className="block text-[#c4956a] font-bold">
-                          {lang === "ar" ? c.ar : c.en}
-                        </span>
-                        <span className="block text-white font-extrabold">
-                          {count} {t("dash_chart_requests")}
-                        </span>
-                      </div>
                     </div>
-                  );
-                })}
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -490,6 +505,188 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Contact / Request Service Modal */}
+      <AnimatePresence>
+        {contactNeed && (
+          <ContactModal
+            need={contactNeed}
+            onClose={() => setContactNeed(null)}
+            lang={lang}
+            t={t}
+          />
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
+function ContactModal({
+  need,
+  onClose,
+  lang,
+  t,
+}: {
+  need: Need;
+  onClose: () => void;
+  lang: string;
+  t: (key: string) => string;
+}) {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [message, setMessage] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!name.trim() || !phone.trim()) return;
+    try {
+      const existing = JSON.parse(localStorage.getItem("rawaj_service_requests") || "[]");
+      existing.push({
+        id: `sr_${Date.now()}`,
+        need_id: need.id,
+        need_description: need.description,
+        need_category: need.category,
+        name: name.trim(),
+        phone: phone.trim(),
+        message: message.trim(),
+        created_at: new Date().toISOString(),
+      });
+      localStorage.setItem("rawaj_service_requests", JSON.stringify(existing));
+    } catch {}
+    setSubmitted(true);
+  }
+
+  const catDef = CATEGORY_MAP[need.category];
+  const catLabel = lang === "ar" ? catDef.ar : catDef.en;
+  const Icon = CATEGORY_UI[need.category].icon;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <motion.div
+        initial={{ scale: 0.92, y: 16 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.92, y: 16 }}
+        className="bg-[#faf4ec] rounded-2xl shadow-2xl w-full max-w-md relative border border-[#e8d5b7] overflow-hidden"
+      >
+        {/* Header */}
+        <div className="bg-[#1a3a4a] text-white p-5 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <MessageCircle className="w-5 h-5 text-[#14b8a6]" />
+            <span className="font-bold text-sm">{t("contact_modal_title")}</span>
+          </div>
+          <button onClick={onClose} className="text-white/60 hover:text-white transition-colors">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="p-6">
+          {submitted ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="text-center py-6"
+            >
+              <div className="w-16 h-16 bg-[#14b8a6]/15 text-[#14b8a6] rounded-full flex items-center justify-center mx-auto mb-4 border border-[#14b8a6]/30">
+                <CheckCircle2 className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-extrabold text-[#1a3a4a] mb-2">
+                {t("contact_success_title")}
+              </h3>
+              <p className="text-xs text-[#8b7355] leading-relaxed max-w-xs mx-auto">
+                {t("contact_success_body")}
+              </p>
+              <button
+                onClick={onClose}
+                className="mt-6 bg-[#14b8a6] text-white font-bold px-8 py-2.5 rounded-lg hover:bg-[#0f9f8e] transition-colors text-sm"
+              >
+                {t("contact_success_close")}
+              </button>
+            </motion.div>
+          ) : (
+            <>
+              {/* Listing snippet */}
+              <div className="mb-5 p-3 bg-[#f0e6d3] rounded-xl border border-[#e8d5b7] flex gap-3 items-start">
+                <div className="p-2 bg-[#c4956a]/15 rounded-lg shrink-0">
+                  <Icon className="w-4 h-4 text-[#c4956a]" />
+                </div>
+                <div className="min-w-0">
+                  <span className="text-[10px] font-bold text-[#c4956a] uppercase tracking-wider">
+                    {catLabel}
+                  </span>
+                  <p className="text-xs text-[#4a3728] mt-0.5 line-clamp-2 leading-relaxed">
+                    {need.description}
+                  </p>
+                </div>
+              </div>
+              <p className="text-xs text-[#8b7355] mb-5">{t("contact_modal_sub")}</p>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-[#4a3728] mb-1">
+                    {t("contact_name_label")} *
+                  </label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    placeholder={t("contact_name_placeholder")}
+                    className="w-full border border-[#e8d5b7] bg-white rounded-lg px-3 py-2 text-sm text-[#1a3a4a] focus:outline-none focus:border-[#14b8a6] placeholder-[#c6b89a]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-[#4a3728] mb-1">
+                    {t("contact_phone_label")} *
+                  </label>
+                  <input
+                    type="text"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    required
+                    placeholder={t("contact_phone_placeholder")}
+                    className="w-full border border-[#e8d5b7] bg-white rounded-lg px-3 py-2 text-sm text-[#1a3a4a] focus:outline-none focus:border-[#14b8a6] placeholder-[#c6b89a]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-[#4a3728] mb-1">
+                    {t("contact_msg_label")}
+                  </label>
+                  <textarea
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    rows={3}
+                    placeholder={t("contact_msg_placeholder")}
+                    className="w-full border border-[#e8d5b7] bg-white rounded-lg px-3 py-2 text-sm text-[#1a3a4a] focus:outline-none focus:border-[#14b8a6] placeholder-[#c6b89a] resize-none"
+                  />
+                </div>
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="flex-1 border border-[#e8d5b7] text-[#8b7355] font-bold py-2.5 rounded-lg hover:bg-[#f0e6d3] transition-colors text-sm"
+                  >
+                    {t("contact_cancel")}
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 bg-[#14b8a6] text-white font-bold py-2.5 rounded-lg hover:bg-[#0f9f8e] transition-colors text-sm flex items-center justify-center gap-2"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    {t("contact_submit")}
+                  </button>
+                </div>
+              </form>
+            </>
+          )}
+        </div>
+      </motion.div>
     </motion.div>
   );
 }

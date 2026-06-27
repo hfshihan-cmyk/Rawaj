@@ -106,6 +106,11 @@ export default function OpportunityDetail({ opp }: { opp: Opportunity }) {
                   <span className="block text-sm font-bold text-[#1a3a4a] font-mono">
                     {opp.market_size_ar}
                   </span>
+                  {opp.market_size_source && (
+                    <span className="block text-[9px] text-[#b09070] mt-1 leading-tight italic">
+                      {opp.market_size_source}
+                    </span>
+                  )}
                 </div>
                 <div>
                   <span className="block text-[10px] text-[#8b7355] font-bold uppercase mb-1">

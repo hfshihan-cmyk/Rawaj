@@ -41,7 +41,7 @@ export default function LandingPage() {
       <section
         className="relative flex flex-col items-center justify-center text-center px-6 py-24"
         style={{
-          backgroundImage: "url('/desert-bg.png')",
+          backgroundImage: "url('/landing-bg.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           minHeight: "100vh",
